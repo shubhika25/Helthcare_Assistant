@@ -20,7 +20,7 @@ if not PINECONE_API_KEY:
     raise ValueError("❌ Pinecone API key not found! Check your .env or environment variables.")
 
 # ✅ Initialize Pinecone only once
-pc = Pinecone(api_key="pcsk_2SZmuv_CgZ7WHxy576vkw5LBGGMAPtH6sep3zF2zYCwdoe1jr2BdcKuuVWi4RiXB1PsD92")
+pc = Pinecone(api_key="PINECONE_API_KEY ")
 print(f"✅ Pinecone initialized successfully")
 
 UPLOAD_DIR = "./uploaded_docs"
