@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 Medical AI Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1, h2 { color: #2f3640; }
+    textarea, input[type="file"] {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #273c75;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background: #40739e; }
+    pre {
+      background: #dcdde1;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Medical AI Assistant</h1>
+
+  <h2>Ask a Medical Question</h2>
+  <textarea id="question" rows="3" placeholder="Type your question..."></textarea><br>
+  <button onclick="askQuestion()">Ask</button>
+
+  <h3>Response:</h3>
+  <pre id="answer">No query yet.</pre>
+
+  <hr>
+
+  <h2>📄 Upload & Analyze Lab Report</h2>
+  <input type="file" id="labFile" accept="application/pdf">
+  <button onclick="uploadReport()">Upload & Analyze</button>
+
+  <h3>Analysis:</h3>
+  <pre id="labResult">No file uploaded.</pre>
+
+<script>
+  // ✅ FastAPI base URL
+  const API_BASE = "http://127.0.0.1:8000";
+
+  // 🧠 Ask Question (FormData)
+  async function askQuestion() {
+    const question = document.getElementById("question").value.trim();
+    const answerBox = document.getElementById("answer");
+
+    if (!question) {
+      alert("Please enter a question.");
+      return;
+    }
+
+    answerBox.textContent = "⏳ Processing your question...";
+
+    try {
+      // send as form-data
+      const formData = new FormData();
+      formData.append("question", question);
+
+      const response = await fetch(`${API_BASE}/ask/`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      const data = await response.json();
+      console.log("🧠 Ask endpoint response:", data);
+
+      answerBox.textContent =
+        data.response || JSON.stringify(data, null, 2) || "No response.";
+    } catch (err) {
+      console.error("❌ Error:", err);
+      answerBox.textContent = "❌ Error contacting server (CORS or network).";
+    }
+  }
+
+  // 📄 Upload & Analyze Report (already correct)
+  async function uploadReport() {
+    const fileInput = document.getElementById("labFile");
+    const labResultBox = document.getElementById("labResult");
+
+    if (!fileInput.files.length) {
+      alert("Please select a PDF file first!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    labResultBox.textContent = "⏳ Uploading and analyzing your report...";
+    console.log("📤 Uploading:", fileInput.files[0].name);
+
+    try {
+      const response = await fetch(`${API_BASE}/upload_and_analyze_lab_report/`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ Backend error:", errorText);
+        labResultBox.textContent = `❌ Error: ${errorText}`;
+        return;
+      }
+
+      const data = await response.json();
+      console.log("✅ Response:", data);
+
+      const analysis = data.analysis;
+      if (!analysis) {
+        labResultBox.textContent = "⚠️ No valid analysis data returned.";
+        return;
+      }
+
+      const paramsHTML = (analysis.parameters || [])
+        .map(p => {
+          if (typeof p === "string") return `<li>${p}</li>`;
+          if (typeof p === "object") {
+            const key = Object.keys(p)[0];
+            const value = Object.values(p)[0];
+            return `<li><strong>${key}</strong>: ${value}</li>`;
+          }
+          return "";
+        })
+        .join("");
+
+      labResultBox.innerHTML = `
+        <strong>📄 File:</strong> ${data.filename}<br><br>
+        <strong>🧪 Parameters:</strong>
+        <ul>${paramsHTML}</ul>
+        <strong>🩺 Summary:</strong> ${analysis.summary || "No summary found"}<br><br>
+        <em>✅ Analysis successfully processed.</em>
+      `;
+    } catch (err) {
+      console.error("❌ Upload error:", err);
+      labResultBox.textContent = "❌ Network or CORS error. Check console.";
+    }
+  }
+</script>
+
+</body>
+</html>

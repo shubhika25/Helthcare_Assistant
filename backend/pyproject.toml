@@ -1,0 +1,31 @@
+[project]
+name = "medical_rag"
+version = "0.1.0"
+description = "Medical RAG FastAPI backend using LangChain and Hugging Face."
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "langchain==0.3.7",
+    "langchain-community==0.3.7",
+    "langchain-groq==0.2.1",
+    "langchain-huggingface==0.3.1",
+    "pinecone",
+    "PyMuPDF",
+    "pytesseract",
+    "opencv-python-headless",  # headless version for Docker
+    "pdf2image",
+    "pillow",
+    'sentence_transformers'
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "httpx",
+    "black",
+    "ruff"
+]

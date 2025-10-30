@@ -1,0 +1,150 @@
+# =========================
+# General
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+*.env
+.env
+*.log
+*.sqlite3
+*.db
+*.pid
+*.seed
+*.swp
+.idea/
+.vscode/
+*.bak
+
+# =========================
+# Python / FastAPI Backend
+# =========================
+/venv/
+/env/
+/.venv/
+/.mypy_cache/
+/pytest_cache/
+/coverage/
+/backend/__pycache__/
+/backend/*.egg-info/
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/.coverage
+backend/.env
+backend/.DS_Store
+
+# =========================
+# Frontend (React / HTML)
+# =========================
+/frontend/node_modules/
+/frontend/build/
+/frontend/.env
+/frontend/.cache/
+/frontend/.next/
+/frontend/dist/
+
+# =========================
+# Docker / Compose / Cache
+# =========================
+*.pid
+*.tar
+*.bak
+*.temp
+*.tmp
+*.log
+docker-compose.override.yml
+Dockerfile~
+**/docker-compose.override.yml
+
+# Ignore local image cache & volumes
+docker-data/
+**/.docker/
+**/docker/
+
+# =========================
+# IDE / OS Files
+# =========================
+*.iml
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# Virtual Environments / Artifacts
+# =========================
+/*.egg
+/*.egg-info
+/dist/
+/build/
+/.eggs/
+/*.whl
+MANIFEST
+
+# =========================
+# Secret Keys / Config Files
+# =========================
+*.pem
+*.key
+*.crt
+*.p12
+*.cer
+*.json
+.env.local
+.env.production
+.env.development
+.env.*
+secrets.json
+
+# =========================
+# Data / Cache
+# =========================
+/tmp/
+/data/
+/logs/
+/output/
+/__pycache__/
+/.ipynb_checkpoints
+
+# =========================
+# Models / Embeddings / Cache
+# =========================
+/models/
+/embeddings/
+/checkpoints/
+/runs/
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.onnx
+
+# =========================
+# Pinecone / HuggingFace / Keys
+# =========================
+pinecone_keys.txt
+huggingface_keys.txt
+
+# =========================
+# Local Files
+# =========================
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.csv
+*.tsv
+*.xlsx
+*.zip
+*.pdf
+*.mp4
+*.mp3
+*.wav
+/uploads/
